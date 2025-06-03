@@ -1,0 +1,43 @@
+//Given the root of a binary tree, return all root-to-leaf paths in any order.
+
+//A leaf is a node with no children.
+
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> out;
+        if(root) getpaths(root, out, "");
+        return out;
+    }
+
+    void getpaths(TreeNode* node, vector<string> &out, string s)
+    {
+        s+=to_string(node->val);
+        if (node->left) getpaths(node->left, out, s + "->");
+        if (node->right) getpaths(node->right, out, s + "->");
+        if (!node->left && !node->right) out.push_back(s);
+
+    }
+};
+
+
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        stack<pair<TreeNode*, string>> st;
+        st.push({root, to_string(root->val)});
+        while(!st.empty())
+        {
+            auto [node, path] = st.top();
+            st.pop();
+            if(!node->left && !node->right)
+                res.push_back(path);
+            if(node->left)
+                st.push({node->left, path + "->" + to_string(node->left->val)});
+            if(node->right)
+                st.push({node->right, path + "->" + to_string(node->right->val)});
+        }
+        return res;
+    }
+};
